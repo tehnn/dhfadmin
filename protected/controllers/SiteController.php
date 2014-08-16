@@ -157,13 +157,10 @@ GROUP BY phs.pid ";
         ));
     }
 
-    public function actionTestFilter() {
-        // Create filter model and set properties
+    public function actionSql2Grid() {      
         $filtersForm = new FiltersForm;
         if (isset($_GET['FiltersForm']))
             $filtersForm->filters = $_GET['FiltersForm'];
-
-// Get rawData and create dataProvider
 
         $sql = "SELECT phs.prename,phs.name,phs.lname,phs.sex,phs.agey,phs.code506,phs.date_ill,phs.date_found
 ,phs.addr,SUBSTR(phs.moo,7) as moo,SUBSTR(phs.tmb,5) as tambon,substr(phs.amp,3) as amphur
@@ -177,7 +174,10 @@ GROUP BY phs.pid ";
         $rawData = Yii::app()->db->createCommand($sql)->queryAll();
 
         $filteredData = $filtersForm->filter($rawData);
+        
+         
         $dataProvider = new CArrayDataProvider($filteredData, array(
+            'id' => 'test',
             'totalItemCount' => count($rawData),
             'pagination' => array(
                 'pageSize' => 8

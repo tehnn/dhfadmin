@@ -51,7 +51,7 @@ return array(
             'username' => 'root',
             'password' => 'hdcplkhealthadmin01',
             'charset' => 'utf8',
-            //'enableProfiling' => true,
+            'enableProfiling' => true,
         ),
         'errorHandler' => array(
             // use 'site/error' action to display errors
@@ -61,8 +61,8 @@ return array(
             'class' => 'CLogRouter',
             'routes' => array(
                 array(
-                    'class' => 'CFileLogRoute',
-                    //'class'=>'CProfileLogRoute',
+                    //'class' => 'CFileLogRoute',
+                    'class'=>'CProfileLogRoute',
                     'levels' => 'error, warning',
                 ),
             // uncomment the following to show log messages on web pages

@@ -67,8 +67,6 @@ class SiteController extends Controller {
         if (isset($_POST['submit'])) {
             $date1 = $_POST['date1'];
             $date2 = $_POST['date2'];
-
-
             $merge->addBetweenCondition('date_ill', $date1, $date2);
         }
 
@@ -85,17 +83,33 @@ class SiteController extends Controller {
             'production' => $production
         ));
     }
+    
+    public function actionTestSQL(){
+        $sql = "SELECT phs.prename,phs.name,phs.lname,phs.sex,phs.agey,phs.code506,phs.date_ill,
+            phs.date_found ,phs.addr,SUBSTR(phs.moo,7) as moo,SUBSTR(phs.tmb,5) as tambon,
+            substr(phs.amp,3) as amphur ,r.pcu_receive as hospcode,h.off_name as hospname,
+            COUNT(phm.pcu_do) disease_control from patient_hos phs 
+            LEFT JOIN patient_home phm on phs.pid = phm.pid 
+            LEFT JOIN receive r on r.pid = phs.pid 
+            LEFT JOIN hospital h on h.off_id = r.pcu_receive 
+            where phs.pid NOT in (select p.pid from patient_cut p) 
+            GROUP BY phs.pid ";       
 
-    public function actionIndex2() {
+        $dataReader = Yii::app()->db->createCommand($sql)->queryAll();
+        CVarDumper::dump($dataReader);
+    }
 
-        $sql = "SELECT phs.prename,phs.name,phs.lname,phs.sex,phs.agey,phs.code506,phs.date_ill,phs.date_found
-,phs.addr,SUBSTR(phs.moo,7) as moo,SUBSTR(phs.tmb,5) as tambon,substr(phs.amp,3) as amphur
-,r.pcu_receive as hospcode,h.off_name as hospname,COUNT(phm.pcu_do) disease_control from patient_hos phs 
-LEFT JOIN patient_home phm on phs.pid = phm.pid
-LEFT JOIN receive r on r.pid = phs.pid
-LEFT JOIN hospital h on h.off_id = r.pcu_receive
-where phs.pid NOT in (select p.pid from patient_cut p)
-GROUP BY phs.pid ";
+    public function actionTestSQL2() {
+
+        $sql = "SELECT phs.prename,phs.name,phs.lname,phs.sex,phs.agey,phs.code506,phs.date_ill,
+            phs.date_found ,phs.addr,SUBSTR(phs.moo,7) as moo,SUBSTR(phs.tmb,5) as tambon,
+            substr(phs.amp,3) as amphur ,r.pcu_receive as hospcode,h.off_name as hospname,
+            COUNT(phm.pcu_do) disease_control from patient_hos phs 
+            LEFT JOIN patient_home phm on phs.pid = phm.pid 
+            LEFT JOIN receive r on r.pid = phs.pid 
+            LEFT JOIN hospital h on h.off_id = r.pcu_receive 
+            where phs.pid NOT in (select p.pid from patient_cut p) 
+            GROUP BY phs.pid ";
         //ORDER BY phs.date_found desc
 
         $dataReader = Yii::app()->db->createCommand($sql)->queryAll();
@@ -170,8 +184,12 @@ LEFT JOIN receive r on r.pid = phs.pid
 LEFT JOIN hospital h on h.off_id = r.pcu_receive
 where phs.pid NOT in (select p.pid from patient_cut p)
 GROUP BY phs.pid ";
+        
+        
 
         $rawData = Yii::app()->db->createCommand($sql)->queryAll();
+print_r($rawData);
+
 
         $filteredData = $filtersForm->filter($rawData);
         

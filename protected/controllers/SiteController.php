@@ -115,8 +115,8 @@ class SiteController extends Controller {
         $dataReader = Yii::app()->db->createCommand($sql)->queryAll();
 
 
-        $dataProvider = new CSqlDataProvider($sql, array(// แบบ sql
-            //$dataProvider = new CArrayDataProvider($dataReader, array(
+        //$dataProvider = new CSqlDataProvider($sql, array(// แบบ sql
+            $dataProvider = new CArrayDataProvider($dataReader, array(
             'totalItemCount' => count($dataReader),
             'pagination' => array(
                 'pageSize' => 3

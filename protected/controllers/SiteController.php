@@ -188,7 +188,7 @@ GROUP BY phs.pid ";
         
 
         $rawData = Yii::app()->db->createCommand($sql)->queryAll();
-print_r($rawData);
+//print_r($rawData);
 
 
         $filteredData = $filtersForm->filter($rawData);
